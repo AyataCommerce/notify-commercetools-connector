@@ -59,20 +59,6 @@ If you want to set an attribute from an array of objects you can follow this ins
   Hello {{shippingAddress.firstName}},\n\n your order #{{id}} has been confirmed! at rate : {{taxedPrice.taxPortions[0].rate}}
   ```
 
-### Incorrect Formats
-
-```plaintext
-Hello, your order has been confirmed! Total: .
-```
-
-### Improper Line Breaks:
-
-```plaintext
-Hello {{shippingAddress.firstName}}, Your order #{{id}} has been confirmed!
-```
-
-* In this format, the lack of `\n` results in a cramped message.
-
 ## Requirements and Restrictions:
 
 * **Mandatory Fields**: Ensure that all placeholders are populated with valid data from the resource response to avoid sending incomplete messages.
