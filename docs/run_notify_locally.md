@@ -12,12 +12,12 @@ Depending on the component you want to run:
 
 **For the event-based application (backend):**
 ```
-cd notify-commercetools-integration/notify-event
+cd notify-commercetools-connector/notify-event
 ```
 
 **For the custom front-end application (Merchant Center UI):**
 ```
-cd notify-commercetools-integration/mc-notify
+cd notify-commercetools-connector/mc-notify
 ```
 
 ## 3. Install Dependencies
