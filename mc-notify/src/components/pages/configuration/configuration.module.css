@@ -1,0 +1,39 @@
+.configContainer {
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.sidebarContainer {
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+.contentContainer {
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .configContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebarContainer {
+        position: fixed;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+
+    .sidebarContainer.open {
+        transform: translateX(0);
+    }
+
+    .contentContainer {
+        padding: 1rem;
+    }
+}

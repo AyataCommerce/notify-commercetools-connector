@@ -1,0 +1,51 @@
+{
+    "container": "notify-channels",
+    "key": "notify-channels-key",
+    "value": {
+        "whatsapp": {
+            "configurations": {
+                "isEnabled": true,
+                "messageBody": {
+                    "OrderCreated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    },
+                    "OrderUpdated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    }
+                }
+            }
+        },
+        "email": {
+            "configurations": {
+                "isEnabled": true,
+                "messageBody": {
+                    "OrderCreated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    },
+                    "OrderUpdated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    }
+                }
+            }
+        },
+        "sms": {
+            "configurations": {
+                "isEnabled": true,
+                "messageBody": {
+                    "OrderCreated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    },
+                    "OrderUpdated": {
+                        "message": "Hello, this is a test message from the WhatsApp channel",
+                        "sendToPath": "shippingAddress.lastName"
+                    }
+                }
+            }
+        }
+    }
+}

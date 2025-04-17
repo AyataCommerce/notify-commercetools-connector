@@ -1,0 +1,65 @@
+{
+    "container": "notify-messageState",
+    "version": 1,
+    "key": "xxxx-xxxx-xxxxxxx",
+    "value": {
+        "channelReference": {
+            "id": "c5bdee50-393d-4738-b1fe-81df4517eedf",
+            "typeId": "key-value-document"
+        },
+        "channelsProcessed": {
+            "whatsapp": {
+                "isSent": [
+                    "processing",
+                    true,
+                    false
+                ]
+            },
+            "email": {
+                "isSent": [
+                    "processing",
+                    true,
+                    false
+                ]
+            },
+            "sms": {
+                "isSent": [
+                    "processing",
+                    true,
+                    false
+                ]
+            }
+        },
+        "messsage": {
+            "notificationType": "Message",
+            "projectKey": "ayata-connectors",
+            "id": "72bdda14-b87b-481e-8f17-751f6433d906",
+            "version": 1,
+            "sequenceNumber": 17,
+            "resource": {
+                "typeId": "order",
+                "id": "9bda752a-447a-47e6-bbc7-07dac970ecb8"
+            },
+            "resourceVersion": 18,
+            "type": "OrderShipmentStateChanged",
+            "shipmentState": "Pending",
+            "oldShipmentState": "Ready",
+            "createdAt": "2025-03-21T09:21:14.174Z",
+            "lastModifiedAt": "2025-03-21T09:21:14.174Z",
+            "createdBy": {
+                "isPlatformClient": true,
+                "user": {
+                    "typeId": "user",
+                    "id": "451f98c6-4796-444d-b7e3-9c1ee47d5d68"
+                }
+            },
+            "lastModifiedBy": {
+                "isPlatformClient": true,
+                "user": {
+                    "typeId": "user",
+                    "id": "451f98c6-4796-444d-b7e3-9c1ee47d5d68"
+                }
+            }
+        }
+    }
+}

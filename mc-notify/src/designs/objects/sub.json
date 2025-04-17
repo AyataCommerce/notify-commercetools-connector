@@ -1,0 +1,40 @@
+{
+    "container": "notify-subscriptions",
+    "key": "notify-subscriptions-key",
+    "value": {
+        "pubsubReference": {
+            "projectId": "pid",
+            "topic": "topic name"
+        },
+        "references": {
+            "id": "4e2b758f-f259-4c14-808e-2beb126bc0f1",
+            "typeId": "notify-channels-key"
+        },
+        "channels": {
+            "whatsapp": {
+                "subscriptions": {
+                    "order": [
+                        {
+                            "triggerType": "OrderCreated",
+                            "subscribedAt": "2024-03-01T00:00:00.000Z"
+                        },
+                        {
+                            "triggerType": "OrderStateChanged",
+                            "subscribedAt": "2024-03-01T00:00:00.000Z"
+                        }
+                    ],
+                    "product": [
+                        {
+                            "triggerType": "ProductCreated",
+                            "subscribedAt": "2024-03-01T00:00:00.000Z"
+                        },
+                        {
+                            "triggerType": "ProductRemoved",
+                            "subscribedAt": "2024-03-01T00:00:00.000Z"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

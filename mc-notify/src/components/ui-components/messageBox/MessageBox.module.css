@@ -1,0 +1,159 @@
+.messageBoxContainer {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.editorContainer {
+    position: relative;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+.editorContainer:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+    background-color: #fff;
+}
+
+.editor {
+    width: 100%;
+    min-height: 10rem;
+    padding: 1rem;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #111827;
+    background: transparent;
+    border: none;
+    resize: vertical;
+    outline: none;
+    white-space: pre-wrap;
+    tab-size: 2;
+}
+
+.editor:focus {
+    outline: none;
+}
+
+.suggestionsMenu {
+    position: absolute;
+    z-index: 10;
+    width: 20rem;
+    max-height: 15rem;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.suggestionsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: #f9fafb;
+}
+
+.contextBadge {
+    padding: 0.25rem 0.5rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    color: #4b5563;
+}
+
+.suggestionsList {
+    list-style: none;
+    padding: 0.25rem 0;
+    margin: 0;
+}
+
+.suggestionItem {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suggestionItem:hover {
+    background-color: #f3f4f6;
+}
+
+.suggestionItem.active {
+    background-color: #eff6ff;
+}
+
+.suggestionText {
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 0.8125rem;
+    color: #111827;
+}
+
+.arrayBadge {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background-color: #e0e7ff;
+    color: #4f46e5;
+    border-radius: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+/* Syntax highlighting for placeholders */
+.editor {
+    position: relative;
+}
+
+/* Add these styles to highlight placeholders in the text */
+.placeholderHighlight {
+    color: #2563eb;
+    font-weight: 500;
+    background-color: #dbeafe;
+    padding: 0 0.125rem;
+    border-radius: 0.125rem;
+}
+
+.messageEditorBox {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    padding: 2%
+}
+
+
+
+.messageEditorBox img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.varButton,
+.previewButton {
+    background-color: #2563eb;
+    display: flex;
+    align-items: center;
+    border: 1px solid #80808054;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    float: right;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+

@@ -1,0 +1,14 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.triggerTitle {
+    border: none;
+    padding: 6px;
+    border-radius: 100px;
+    font-size: 12px;
+    color: white;
+    background-color: #33334e;
+}

@@ -1,0 +1,51 @@
+deployAs:
+  - name: notify-event
+    applicationType: event
+    endpoint: /event
+    scripts:
+      postDeploy: yarn install && yarn build && yarn run connector:post-deploy
+      preUndeploy: yarn install && yarn build && yarn run connector:pre-undeploy
+    configuration:
+      standardConfiguration:
+        - key: CTP_REGION
+          description: commercetools Composable Commerce API region
+          required: true
+          default: "europe-west1.gcp"
+      securedConfiguration:
+        - key: CTP_PROJECT_KEY
+          description: commercetools Composable Commerce project key
+          required: true
+        - key: CTP_CLIENT_ID
+          description: commercetools Composable Commerce client ID
+          required: true
+        - key: CTP_CLIENT_SECRET
+          description: commercetools Composable Commerce client secret
+          required: true
+        - key: CTP_SCOPE
+          description: commercetools Composable Commerce client scope
+          required: true
+        - key: TWILIO_ACCOUNT_SID
+          description: Twilio account SID
+          required: true
+        - key: TWILIO_AUTH_TOKEN
+          description: Twilio auth token
+          required: true
+        - key: SENDGRID_API_KEY
+          description: Sendgrid API key
+          required: true
+  - name: mc-notify
+    applicationType: merchant-center-custom-application
+    configuration:
+      standardConfiguration:
+        - key: CUSTOM_APPLICATION_ID
+          description: the Custom Application ID
+          required: true
+        - key: CLOUD_IDENTIFIER
+          description: The cloud identifier
+          default: 'gcp-eu'
+        - key: ENTRY_POINT_URI_PATH
+          description: The Application entry point URI path
+          required: true
+        - key: TWILIO_ACCOUNT_SID
+          description: Twilio account SID
+          required: true

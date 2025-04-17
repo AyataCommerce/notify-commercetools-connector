@@ -1,0 +1,64 @@
+{
+    "container": "notify-messagelogs",
+    "key": "message-logs-${project-key}",
+    "value": [
+        {
+            "id": "xxxx-xxxx-xxxxxxx",
+            "messageId": "xxxx-xxxx-xxxxxxx",
+            "channels": {
+                "whatsapp": {
+                    "isSent": true,
+                    "lastProcessedDate": "2025-03-21T09:21:14.174Z",
+                    "recipient": "+9155454545444",
+                    "processLogs": [
+                        {
+                            "message": "The resource subscription is not subscribed",
+                            "statusCode": 500,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        },
+                        {
+                            "message": "Message sent successfully",
+                            "statusCode": 200,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        }
+                    ]
+                },
+                "email": {
+                    "isSent": true,
+                    "lastProcessedDate": "2025-03-21T09:21:14.174Z",
+                    "recipient": "someone@gmail.com",
+                    "processLogs": [
+                        {
+                            "message": "The resource subscription is not subscribed",
+                            "statusCode": 500,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        },
+                        {
+                            "message": "Message sent successfully",
+                            "statusCode": 200,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        }
+                    ]
+                },
+                "sms": {
+                    "isSent": false,
+                    "lastProcessedDate": "2025-03-21T09:21:14.174Z",
+                    "recipient": "+9155454545444",
+                    "processLogs": [
+                        {
+                            "message": "The resource subscription is not subscribed",
+                            "statusCode": 500,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        },
+                        {
+                            "message": "The resource subscription is not subscribed",
+                            "statusCode": 500,
+                            "createdAt": "2025-03-21T09:21:14.174Z"
+                        }
+                    ]
+                }
+            },
+            "messsage": "eyJub3RpZmljYXRpb25UeXBlIjoiTWVzc2FnZSIsInByb2plY3RLZXkiOiJheWF0YS1jb25uZWN0b3JzIiwiaWQiOiI3MmJkZGExNC1iODdiLTQ4MWUtOGYxNy03NTFmNjQzM2Q5MDYiLCJ2ZXJzaW9uIjoxLCJzZXF1ZW5jZU51bWJlciI6MTcsInJlc291cmNlIjp7InR5cGVJZCI6Im9yZGVyIiwiaWQiOiI5YmRhNzUyYS00NDdhLTQ3ZTYtYmJjNy0wN2RhYzk3MGVjYjgifSwicmVzb3VyY2VWZXJzaW9uIjoxOCwidHlwZSI6Ik9yZGVyU2hpcG1lbnRTdGF0ZUNoYW5nZWQiLCJzaGlwbWVudFN0YXRlIjoiUGVuZGluZyIsIm9sZFNoaXBtZW50U3RhdGUiOiJSZWFkeSIsImNyZWF0ZWRBdCI6IjIwMjUtMDMtMjFUMDk6MjE6MTQuMTc0WiIsImxhc3RNb2RpZmllZEF0IjoiMjAyNS0wMy0yMVQwOToyMToxNC4xNzRaIiwiY3JlYXRlZEJ5Ijp7ImlzUGxhdGZvcm1DbGllbnQiOnRydWUsInVzZXIiOnsidHlwZUlkIjoidXNlciIsImlkIjoiNDUxZjk4YzYtNDc5Ni00NDRkLWI3ZTMtOWMxZWU0N2Q1ZDY4In19LCJsYXN0TW9kaWZpZWRCeSI6eyJpc1BsYXRmb3JtQ2xpZW50Ijp0cnVlLCJ1c2VyIjp7InR5cGVJZCI6InVzZXIiLCJpZCI6IjQ1MWY5OGM2LTQ3OTYtNDQ0ZC1iN2UzLTljMWVlNDdkNWQ2OCJ9fX0="
+        }
+    ]
+}
