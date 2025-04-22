@@ -78,13 +78,24 @@
     color: white;
 }
 
-.addButton>img {
+.refreshButton {
+    background: #ffffff;
+    border-radius: 100px;
+    border: 1px solid rgba(128, 128, 128, 0.393);
+}
+
+.addButton>img,
+.refreshButton>img {
     width: 20px;
     height: 20px;
 }
 
 .addButton:hover {
     background: #3182ce;
+    transform: translateY(-1px);
+}
+.refreshButton:hover {
+    border: 1px solid rgba(128, 128, 128, 0.652);
     transform: translateY(-1px);
 }
 

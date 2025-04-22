@@ -7,6 +7,7 @@ import logIcon from '../../../assets/icons/logs.svg';
 import settingsIcon from '../../../assets/icons/settings_icon.svg';
 import whatsappIcon from '../../../assets/icons/whatsapp-symbol.svg';
 import emailIcon from '../../../assets/icons/email-symbol.svg';
+import refreshIcon from '../../../assets/icons/refershGrey.svg';
 import smsIcon from '../../../assets/icons/smartphone-sms.svg';
 import { toggleChannelStatusHook } from '../../../hooks/channel/updateChannel.hooks';
 import { ChannelConfigurationRequest } from '../../../interfaces/channel.interface';
@@ -26,13 +27,16 @@ type ChannelPannelProps = {
 const ChannelPannel = ({ channel }: ChannelPannelProps) => {
     const [activeTab, setActiveTab] = useState('subscriptions');
     const [isChannelActive, setIsChannelActive] = useState(false);
-    const [subscriptions, setSubscriptions] = useState<any>(null);
     const [messageData, setMessageData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [addSubscription, setAddSubscription] = useState(false);
     const [channelData, setChannelData] = useState<ChannelConfigurationRequest>({})
     const dispatch = useAsyncDispatch();
+    const [refreshTrigger, setRefreshTrigger] = useState(false);
 
+    const handleRefresh = () => {
+        setRefreshTrigger(prev => !prev);
+    };
     const tabs = [
         { id: 'subscriptions', label: 'Subscriptions', icon: bellIcon },
         { id: 'logs', label: 'Logs', icon: logIcon },
@@ -55,7 +59,6 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
                 if (isMounted) { // Only update state if component is mounted
 
                     if (response?.value?.channels?.[channel]) {
-                        setSubscriptions(response.value.channels[channel]);
                         setChannelData(response.value.references.obj.value[channel].configurations || {});
                         const isEnabled = response.value.references?.obj?.value[channel]?.configurations?.isEnabled || false;
                         const messageBody = response.value.references?.obj?.value[channel]?.configurations?.messageBody || {};
@@ -64,7 +67,6 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
                         setMessageData(messageBody);
                     } else {
                         // Set default empty values if no data found
-                        setSubscriptions({ subscriptions: [] });
                         setChannelData({});
                         setIsChannelActive(false);
                         setMessageData({});
@@ -74,7 +76,6 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
             } catch (error) {
                 if (isMounted) {
                     console.error("Error fetching subscriptions:", error);
-                    setSubscriptions({ subscriptions: [] });
                     setIsLoading(false);
                 }
             }
@@ -105,33 +106,6 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
     }
     const handleToggleAddSubscription = async (subscriptionClicked: boolean) => {
         setAddSubscription(!subscriptionClicked);
-        if (addSubscription) {
-            const response = await fetchCustomObjectQueryRepository(
-                dispatch,
-                'notify-subscriptions',
-                'notify-subscriptions-key',
-                'expand=value.references.channelReference'
-            );
-
-            setIsLoading(true);
-
-            if (response?.value?.channels?.[channel]) {
-                setSubscriptions(response.value.channels[channel]);
-                setChannelData(response.value.references.obj.value[channel].configurations || {});
-                const isEnabled = response.value.references?.obj?.value[channel]?.configurations?.isEnabled || false;
-                const messageBody = response.value.references?.obj?.value[channel]?.configurations?.messageBody || {};
-
-                setIsChannelActive(isEnabled);
-                setMessageData(messageBody);
-            } else {
-                // Set default empty values if no data found
-                setSubscriptions({ subscriptions: [] });
-                setChannelData({});
-                setIsChannelActive(false);
-                setMessageData({});
-            }
-            setIsLoading(false);
-        }
     }
 
     return (
@@ -182,6 +156,12 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
                         )}
                         <span>{isChannelActive ? 'Active' : 'Inactive'}</span>
                     </button>
+                    <button
+                        className={`${styles.actionButton} ${styles.refreshButton}`}
+                        onClick={handleRefresh} 
+                    >
+                        <img src={refreshIcon} alt="Refresh" />
+                    </button>
                 </div>
             </div>
 
@@ -197,12 +177,12 @@ const ChannelPannel = ({ channel }: ChannelPannelProps) => {
                         <div className={styles.tabContent}>
                             {activeTab === 'subscriptions' && (
                                 <SubscriptionList
-                                    subscriptionList={subscriptions}
                                     channel={channel}
                                     messageData={messageData}
+                                    refreshTrigger={refreshTrigger}
                                 />
                             )}
-                            {activeTab === 'logs' && <Logs channel={channel} />}
+                                {activeTab === 'logs' && <Logs channel={channel} refreshTrigger={refreshTrigger} />}
                             {activeTab === 'settings' && <ChannelSettings channel={channel} />}
                         </div>
                     </>

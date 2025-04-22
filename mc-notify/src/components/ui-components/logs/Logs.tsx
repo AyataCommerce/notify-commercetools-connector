@@ -71,6 +71,8 @@ type LogItem = {
 
 type LogsProps = {
     channel: string;
+    refreshTrigger?: boolean;
+
 };
 
 const getStatusColor = (isSent: boolean, lastLog?: ProcessLog) => {
@@ -120,7 +122,7 @@ const processLogsForChannel = (response: any, channel: string): LogItem[] => {
         .filter((item: LogItem) => item.value.channels && item.value.channels[channel]);
 };
 
-const ChannelLogs = ({ channel }: LogsProps) => {
+const ChannelLogs = ({ channel, refreshTrigger }: LogsProps) => {
     const dispatch = useAsyncDispatch();
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
     const [logData, setLogData] = useState<LogItem[]>([]);
@@ -137,53 +139,51 @@ const ChannelLogs = ({ channel }: LogsProps) => {
         { id: 'process_logs', label: 'Process Logs', icon: processLogsIcon },
         { id: 'message_details', label: 'Message Details', icon: messageDetailsIcon },
     ];
-    const fetchData = async () => {
-        setIsLoading(true);
-        setError(null);
 
-        try {
-            // Fetch count first
-            const total = await fetchCustomObjectsCount(dispatch, 'notify-messagelogs') || 0;
-
-            // Then fetch paginated data
-            const offset = (pagination.page - 1) * pagination.pageSize;
-            const response = await fetchAllCustomObjectsRepository(
-                dispatch,
-                'notify-messagelogs',
-                { limit: pagination.pageSize, offset }
-            );
-
-            const processedData = processLogsForChannel(response, channel);
-            setLogData(processedData);
-            setPagination(prev => ({
-                ...prev,
-                total,
-            }));
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setError('Failed to load logs. Please try again later.');
-            setLogData([]);
-            setPagination(prev => ({ ...prev, total: 0 }));
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     useEffect(() => {
         let isMounted = true;
 
-        const loadData = async () => {
-            await fetchData();
+        const fetchData = async () => {
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                // Fetch count first
+                const total = await fetchCustomObjectsCount(dispatch, 'notify-messagelogs') || 0;
+
+                // Then fetch paginated data
+                const offset = (pagination.page - 1) * pagination.pageSize;
+                const response = await fetchAllCustomObjectsRepository(
+                    dispatch,
+                    'notify-messagelogs',
+                    { limit: pagination.pageSize, offset }
+                );
+
+                const processedData = processLogsForChannel(response, channel);
+                setLogData(processedData);
+                setPagination(prev => ({
+                    ...prev,
+                    total,
+                }));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError('Failed to load logs. Please try again later.');
+                setLogData([]);
+                setPagination(prev => ({ ...prev, total: 0 }));
+            } finally {
+                setIsLoading(false);
+            }
         };
 
         if (isMounted) {
-            loadData();
+            fetchData();
         }
 
         return () => {
             isMounted = false;
         };
-    }, [dispatch, channel, pagination.page, pagination.pageSize]);
+    }, [dispatch, channel, pagination.page, pagination.pageSize, refreshTrigger]);
 
     const toggleRow = (id: string) => {
         setExpandedRow(expandedRow === id ? null : id);

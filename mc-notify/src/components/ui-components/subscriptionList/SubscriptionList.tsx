@@ -10,6 +10,8 @@ import Pagination from "../pagination/Pagination";
 import SearchBar from "../searchBar/SearchBar";
 import styles from "./subscriptionList.module.css";
 import notFound from "./not-found.png"
+import { fetchCustomObjectQueryRepository } from '../../../repository/customObject.repository';
+import Loader from '../loader';
 
 type Subscription = {
     resourceType: string;
@@ -25,15 +27,18 @@ type MessageData = {
 };
 
 type SubscriptionListProps = {
-    subscriptionList: { subscriptions: Subscription[] };
     channel: string;
     messageData: MessageData;
+    refreshTrigger?: boolean;
 };
+
 
 const ITEMS_PER_PAGE = 5;
 
-const SubscriptionList = ({ subscriptionList, channel, messageData }: SubscriptionListProps) => {
+const SubscriptionList = ({ channel, messageData, refreshTrigger }: SubscriptionListProps) => {
     const dispatch = useAsyncDispatch();
+    const [isLoading, setIsLoading] = useState(false);
+
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
     const [subList, setSubList] = useState<{ subscriptions: Subscription[] }>({ subscriptions: [] });
     const [currentPage, setCurrentPage] = useState(1);
@@ -42,11 +47,47 @@ const SubscriptionList = ({ subscriptionList, channel, messageData }: Subscripti
         resourceType: null,
         triggerType: null
     });
+    const [isUnsubscribing, setIsUnsubscribing] = useState(false)
+
 
     useEffect(() => {
-        setSubList(subscriptionList);
-        setCurrentPage(1); // Reset to first page when subscription list changes
-    }, [subscriptionList]);
+        let isMounted = true;
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetchCustomObjectQueryRepository(
+                    dispatch,
+                    'notify-subscriptions',
+                    'notify-subscriptions-key',
+                    'expand=value.references.channelReference'
+                );
+
+                if (isMounted) {
+                    if (response?.value?.channels?.[channel]) {
+                        setSubList(response.value.channels[channel]);
+                    } else {
+                        // Set default empty values if no data found
+                        setSubList({ subscriptions: [] });
+                    }
+                    setIsLoading(false);
+                }
+                setCurrentPage(1);
+            } catch (error) {
+                if (isMounted) {
+                    console.error("Error fetching subscriptions:", error);
+                    setSubList({ subscriptions: [] });
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [dispatch, channel, refreshTrigger]);
+
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -59,6 +100,7 @@ const SubscriptionList = ({ subscriptionList, channel, messageData }: Subscripti
 
     const handleUnsubscribe = async (resourceType: string, triggerType: string) => {
         try {
+            setIsUnsubscribing(true);
             const subscription: RemoveSubscriptionRequestInterface = {
                 channel,
                 subscription: {
@@ -80,9 +122,10 @@ const SubscriptionList = ({ subscriptionList, channel, messageData }: Subscripti
                     })
                     .filter(sub => sub.triggers?.length),
             }));
-
             setExpandedRow(null);
+            setIsUnsubscribing(false);
         } catch (error) {
+            setIsUnsubscribing(false);
             console.error("Error unsubscribing from trigger:", error);
         }
     };
@@ -150,111 +193,124 @@ const SubscriptionList = ({ subscriptionList, channel, messageData }: Subscripti
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.controls}>
-                <SearchBar
-                    searchTerm={searchTerm}
-                    onSearchChange={setSearchTerm}
-                    placeholder="Search subscriptions..."
-                />
-
-                <div className={styles.filters}>
-                    <FilterDropdown
-                        options={resourceTypes}
-                        selectedValue={filter.resourceType}
-                        onSelect={(value) => setFilter(prev => ({ ...prev, resourceType: value }))}
-                        placeholder="Filter by resource type"
+        <>
+            {isLoading ? (<div className={styles.loadingContainer}>
+                <Loader />
+            </div>) : (<div className={styles.container}>
+                <div className={styles.controls}>
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        placeholder="Search subscriptions..."
                     />
 
-                    <FilterDropdown
-                        options={triggerTypes}
-                        selectedValue={filter.triggerType}
-                        onSelect={(value) => setFilter(prev => ({ ...prev, triggerType: value }))}
-                        placeholder="Filter by trigger type"
-                    />
+                    <div className={styles.filters}>
+                        <FilterDropdown
+                            options={resourceTypes}
+                            selectedValue={filter.resourceType}
+                            onSelect={(value) => setFilter(prev => ({ ...prev, resourceType: value }))}
+                            placeholder="Filter by resource type"
+                        />
 
-                    <button
-                        className={styles.clearFilters}
-                        onClick={() => setFilter({ resourceType: null, triggerType: null })}
-                    >
-                        Clear Filters
-                    </button>
+                        <FilterDropdown
+                            options={triggerTypes}
+                            selectedValue={filter.triggerType}
+                            onSelect={(value) => setFilter(prev => ({ ...prev, triggerType: value }))}
+                            placeholder="Filter by trigger type"
+                        />
+
+                        <button
+                            className={styles.clearFilters}
+                            onClick={() => setFilter({ resourceType: null, triggerType: null })}
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Trigger Type</th>
-                        <th>Resource Type</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {paginatedItems.length > 0 ? (
-                        paginatedItems.map((item) => {
-                            const messageBody = messageData[item.triggerType] || {};
-                            return (
-                                <React.Fragment key={item.rowKey}>
-                                    <tr>
-                                        <td>{item.triggerType}</td>
-                                        <td>{item.resourceType}</td>
-                                        <td>{formatDate(item.subscribedAt)}</td>
-                                        <td className={styles.actionButtonCollection}>
-                                            <button
-                                                className={`${styles.actionButton} ${styles.actionEditButton}`}
-                                                data-tooltip="Edit"
-                                                onClick={() => toggleRow(item.rowKey)}
-                                            >
-                                                <img src={editIcon} alt="Edit" />
-                                            </button>
-                                            <button
-                                                className={`${styles.actionButton} ${styles.actionDisconnectButton}`}
-                                                data-tooltip="Unsubscribe"
-                                                onClick={() =>
-                                                    handleUnsubscribe(item.resourceType, item.triggerType)
-                                                }
-                                            >
-                                                <img src={disconnectIcon} alt="Disconnect" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {expandedRow === item.rowKey && (
-                                        <tr className={`${styles.expandableRow} ${styles.expanded}`}>
-                                            <td colSpan={4}>
-                                                <div className={styles.expandedContent}>
-                                                    <EditSubscription
-                                                        resourceType={item.resourceType}
-                                                        messageBody={messageBody}
-                                                        channel={channel}
-                                                        triggerName={item.triggerType}
-                                                    />
-                                                </div>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Trigger Type</th>
+                            <th>Resource Type</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {paginatedItems.length > 0 ? (
+                            paginatedItems.map((item) => {
+                                const messageBody = messageData[item.triggerType] || {};
+                                return (
+                                    <React.Fragment key={item.rowKey}>
+                                        <tr>
+                                            <td>{item.triggerType}</td>
+                                            <td>{item.resourceType}</td>
+                                            <td>{formatDate(item.subscribedAt)}</td>
+                                            <td className={styles.actionButtonCollection}>
+                                                <button
+                                                    className={`${styles.actionButton} ${styles.actionEditButton}`}
+                                                    data-tooltip="Edit"
+                                                    onClick={() => toggleRow(item.rowKey)}
+                                                >
+                                                    <img src={editIcon} alt="Edit" />
+                                                </button>
+                                                {isUnsubscribing ? (<button
+                                                    className={`${styles.actionButton} ${styles.actionLoadingButton}`}
+                                                >
+                                                    <div className={styles.loadingItem}></div>
+                                                </button>) : (
+                                                    <button
+                                                        className={`${styles.actionButton} ${styles.actionDisconnectButton}`}
+                                                        data-tooltip="Unsubscribe"
+                                                        onClick={() =>
+                                                            handleUnsubscribe(item.resourceType, item.triggerType)
+                                                        }
+                                                    >
+                                                        <img src={disconnectIcon} alt="Disconnect" />
+                                                    </button>
+                                                )}
+
+
                                             </td>
                                         </tr>
-                                    )}
-                                </React.Fragment>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <td colSpan={4} className={styles.noResults}>
-                                No subscriptions found.
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                                        {expandedRow === item.rowKey && (
+                                            <tr className={`${styles.expandableRow} ${styles.expanded}`}>
+                                                <td colSpan={4}>
+                                                    <div className={styles.expandedContent}>
+                                                        <EditSubscription
+                                                            resourceType={item.resourceType}
+                                                            messageBody={messageBody}
+                                                            channel={channel}
+                                                            triggerName={item.triggerType}
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan={4} className={styles.noResults}>
+                                    No subscriptions found.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
 
-            {totalPages > 1 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                />
-            )}
-        </div>
+                {totalPages > 1 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                )}
+            </div>)}
+        </>
+
     );
 };
 
