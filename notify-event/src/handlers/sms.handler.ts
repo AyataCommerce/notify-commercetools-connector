@@ -4,7 +4,7 @@ import { logger } from "../utils/logger.utils";
 import GlobalError from '../errors/global.error';
 import { decryptString } from '../utils/helpers.utils';
 
-const client: Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+
 const twilio_sid = process.env.TWILIO_ACCOUNT_SID || '';
 
 export const smsHandler: ChannelHandler = {
@@ -14,6 +14,7 @@ export const smsHandler: ChannelHandler = {
             logger.info(`Sending SMS message to ${recipient}`);
             logger.info(message);
             // // Send the message
+            const client: Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
             const response = await client.messages.create({
                 body: message,
                 from: decryptedSenderAddress,

@@ -4,8 +4,8 @@ import { logger } from '../utils/logger.utils';
 import { GlobalError } from '../errors/global.error';
 import { decryptString } from '../utils/helpers.utils';
 
-const client: Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const twilio_sid = process.env.TWILIO_ACCOUNT_SID || '';
+
 export const whatsappHandler: ChannelHandler = {
     async sendMessage(message, senderAddress, recipientAddress) {
         try {
@@ -14,6 +14,7 @@ export const whatsappHandler: ChannelHandler = {
             const decryptedSenderAddress = await decryptString(senderAddress, twilio_sid)
             logger.info(`Sending WhatsApp message to ${recipientAddress}`);
             logger.info(message);
+            const client: Twilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
             const response = await client.messages.create({
                 body: message,

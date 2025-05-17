@@ -24,6 +24,17 @@ Notify is an event-driven connector designed to automate real-time message deliv
 - [Overall Information](docs/know_about_notify.md)
 - [Customizing Templates](docs/how_to_customize_template.md)
 
+### Architecture
+![](docs/basic_architecture.jpg)
+
+### Technology Stack
+- Node.js
+- Typescript
+- Twilio
+- Twilio Sendgrid
+- React.js
+
+
 ### How to add new subscription
 ![](docs/media/adding_subscription.gif)
 ##
