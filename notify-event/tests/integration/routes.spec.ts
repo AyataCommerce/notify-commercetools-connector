@@ -8,11 +8,11 @@ jest.mock('../../src/utils/config.utils');
 // Mock environment variable reading
 jest.mock('../../src/utils/config.utils.ts', () => ({
   readConfiguration: jest.fn().mockReturnValue({
-      CTP_CLIENT_ID: "client-id",
-      CTP_CLIENT_SECRET: "client-secret",
-      CTP_PROJECT_KEY: "project-key",
-      CTP_SCOPE: "scope",
-      CTP_REGION: "region"
+      CLIENT_ID: "client-id",
+      CLIENT_SECRET: "client-secret",
+      PROJECT_KEY: "project-key",
+      SCOPE: "scope",
+      REGION: "region"
   })
 }));
 

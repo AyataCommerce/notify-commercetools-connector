@@ -7,22 +7,22 @@ deployAs:
       preUndeploy: yarn install && yarn build && yarn run connector:pre-undeploy
     configuration:
       standardConfiguration:
-        - key: CTP_REGION
+        - key: REGION
           description: commercetools Composable Commerce API region
           required: true
           default: "europe-west1.gcp"
-      securedConfiguration:
-        - key: CTP_PROJECT_KEY
-          description: commercetools Composable Commerce project key
-          required: true
-        - key: CTP_CLIENT_ID
+        - key: CLIENT_ID
           description: commercetools Composable Commerce client ID
           required: true
-        - key: CTP_CLIENT_SECRET
-          description: commercetools Composable Commerce client secret
-          required: true
-        - key: CTP_SCOPE
+        - key: SCOPE
           description: commercetools Composable Commerce client scope
+          required: true
+      securedConfiguration:
+        - key: PROJECT_KEY
+          description: commercetools Composable Commerce project key
+          required: true
+        - key: CLIENT_SECRET
+          description: commercetools Composable Commerce client secret
           required: true
         - key: TWILIO_ACCOUNT_SID
           description: Twilio account SID

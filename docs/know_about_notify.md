@@ -53,11 +53,11 @@ To connect to the commercetools platform, you need to generate API credentials:
 4. Capture the following credentials and update these variables:
 
 ```
-CTP_PROJECT_KEY=your_project_key
-CTP_CLIENT_ID=your_client_id
-CTP_CLIENT_SECRET=your_client_secret
-CTP_SCOPE=view_orders manage_subscriptions ...
-CTP_REGION=europe-west1.gcp (or applicable region)
+PROJECT_KEY=your_project_key
+CLIENT_ID=your_client_id
+CLIENT_SECRET=your_client_secret
+SCOPE=view_orders manage_subscriptions ...
+REGION=europe-west1.gcp (or applicable region)
 ```
 
 ### 2. Twilio Account & Authentication Keys (for WhatsApp/SMS)

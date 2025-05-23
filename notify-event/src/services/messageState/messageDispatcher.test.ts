@@ -41,11 +41,11 @@ jest.mock('../../utils/logger.utils');
 
 jest.mock('../../utils/config.utils.ts', () => ({
     readConfiguration: jest.fn().mockReturnValue({
-        CTP_CLIENT_ID: "XXXXXXXXXXXXXXXXXXXXXXXX",
-        CTP_CLIENT_SECRET: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        CTP_PROJECT_KEY: "test-scope",
-        CTP_SCOPE: "manage_project:test-scope",
-        CTP_REGION: "europe-west1.gcp"
+        CLIENT_ID: "XXXXXXXXXXXXXXXXXXXXXXXX",
+        CLIENT_SECRET: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        PROJECT_KEY: "test-scope",
+        SCOPE: "manage_project:test-scope",
+        REGION: "europe-west1.gcp"
     })
 }));
 
