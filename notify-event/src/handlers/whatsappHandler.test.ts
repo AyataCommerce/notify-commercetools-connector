@@ -1,10 +1,10 @@
-// ✅ Set environment variables before importing the handler
+// ✅ Set environment variables BEFORE importing the handler
 process.env.TWILIO_ACCOUNT_SID = 'mock_sid';
 process.env.TWILIO_AUTH_TOKEN = 'mock_token';
 
+import GlobalError from '../errors/global.error';
 import { decryptString } from '../utils/helpers.utils';
 import { logger } from '../utils/logger.utils';
-import { GlobalError } from '../errors/global.error';
 
 // Mocks
 jest.mock('twilio');
@@ -30,14 +30,12 @@ describe('whatsappHandler.sendMessage', () => {
             },
         });
 
-        mockDecryptString.mockResolvedValue('+1234567890');
-
-        // Assign mocks to logger
         (logger.info as jest.Mock) = mockLoggerInfo;
         (logger.error as jest.Mock) = mockLoggerError;
     });
 
     it('should send WhatsApp message successfully', async () => {
+        mockDecryptString.mockResolvedValue('+1234567890');
         const mockResponse = { sid: 'SM456' };
         mockCreate.mockResolvedValue(mockResponse);
 
@@ -57,13 +55,36 @@ describe('whatsappHandler.sendMessage', () => {
         expect(mockLoggerInfo).toHaveBeenCalledWith(expect.stringContaining('Sending WhatsApp message'));
     });
 
-    it('should throw GlobalError if Twilio fails', async () => {
+    it('should throw GlobalError if Twilio fails with statusCode and message', async () => {
+        mockDecryptString.mockResolvedValue('+1234567890');
         const mockError = { message: 'Twilio error', statusCode: 400 };
         mockCreate.mockRejectedValue(mockError);
 
         await expect(
             whatsappHandler.sendMessage('msg', 'sender', 'recipient')
         ).rejects.toThrow(GlobalError);
+
+        expect(mockLoggerError).toHaveBeenCalledWith(expect.stringContaining('Error sending WhatsApp message'));
+    });
+
+    it('should throw GlobalError with default values if Twilio error lacks message and statusCode', async () => {
+        mockDecryptString.mockResolvedValue('+1234567890');
+        const mockError = {}; // Missing message and statusCode
+        mockCreate.mockRejectedValue(mockError);
+
+        await expect(
+            whatsappHandler.sendMessage('msg', 'sender', 'recipient')
+        ).rejects.toThrow('Failed to send message');
+
+        expect(mockLoggerError).toHaveBeenCalledWith(expect.stringContaining('Error sending WhatsApp message'));
+    });
+
+    it('should throw GlobalError if decryptString fails', async () => {
+        mockDecryptString.mockRejectedValue(new Error('Decryption failed'));
+
+        await expect(
+            whatsappHandler.sendMessage('message', 'badEncryptedSender', 'recipient')
+        ).rejects.toThrow('Decryption failed');
 
         expect(mockLoggerError).toHaveBeenCalledWith(expect.stringContaining('Error sending WhatsApp message'));
     });
