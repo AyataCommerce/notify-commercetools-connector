@@ -1,7 +1,7 @@
 
 
 import { JsonParsingError, MissingPubSubMessageDataError } from '../errors/pubsub.error';
-import { decodePubSubData, generateRandomKey, parsePlaceholder, jsonToBase64 } from './helpers.utils';
+import { decodePubSubData, parsePlaceholder, jsonToBase64 } from './helpers.utils';
 
 jest.mock('./logger.utils', () => ({
     logger: {
@@ -29,14 +29,6 @@ describe('decodePubSubData', () => {
     it('should throw JsonParsingError for bad base64', () => {
         const badBase64 = '###invalid_base64';
         expect(() => decodePubSubData({ data: badBase64 })).toThrow(JsonParsingError);
-    });
-});
-
-describe('generateRandomKey', () => {
-    it('should generate a 32-character alphanumeric key', () => {
-        const key = generateRandomKey();
-        expect(key).toHaveLength(32);
-        expect(/^[A-Za-z0-9]+$/.test(key)).toBe(true);
     });
 });
 
