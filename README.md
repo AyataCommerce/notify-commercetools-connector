@@ -1,7 +1,6 @@
 ![](docs/media/notify_banner_logo.png)
 
-
-Notify is an event-driven connector designed to automate real-time message delivery through multiple communication channels such as WhatsApp, Email, and SMS. It allows users to create subscriptions through the Notify UI and offers additional options like customizing message templates and configuring channels for message delivery. Notify listens to specific events triggered in commercetools—such as order creation or status updates—and sends notifications based on the subscriptions defined within the platform.
+The Notify commercetools connector was created by [AyataCommerce](https://ayatacommerce.com/), this connector is an event-driven solution designed to automate real-time message delivery through multiple communication channels such as WhatsApp, Email, and SMS. It allows users to create subscriptions through the Notify UI and offers additional options like customizing message templates and configuring channels for message delivery. Notify listens to specific events triggered in commercetools—such as order creation or status updates—and sends notifications based on the subscriptions defined within the platform.
 
 ## Features
 - **Event-driven**: Notify listens to specific events triggered in commercetools and sends notifications accordingly.
